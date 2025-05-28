@@ -20,6 +20,7 @@ public class Banco {
 
     private Map<Long, ContaBancaria> contas = new ConcurrentHashMap<>();
     private Long ultimoNumreroConta = 0L;
+    private Serasa serasa = new Serasa();
 
     public Map<Long, ContaBancaria> getContas() {
         return contas;
@@ -41,6 +42,7 @@ public class Banco {
         conta.setSaldo(saldoInicial);
         conta.setNumero(++ultimoNumreroConta);
         contas.put(conta.getNumero(), conta);
+        conta.addObserver(serasa);
         return conta;
     }
 

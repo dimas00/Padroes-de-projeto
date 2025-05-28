@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Data
@@ -17,6 +18,7 @@ public abstract class ContaBancaria {
     private String cpf;
     private double saldo;
     private Collection<MovimentacaoBancaria> movimentacoes = new ArrayList<>();
+    private List<Observer> observers = new ArrayList<>();
 
     public void addMovimentacao(MovimentacaoBancaria movimentacao) {
         movimentacoes.add(movimentacao);
@@ -25,6 +27,25 @@ public abstract class ContaBancaria {
     public abstract Double calculaIR();
 
     public abstract Double saldoDisponivel();
+
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(this);
+        }
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+        notifyObservers();
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -38,3 +59,4 @@ public abstract class ContaBancaria {
         return Objects.hashCode(numero);
     }
 }
+
